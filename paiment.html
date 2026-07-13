@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiements - Diapal Ma Diap</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ---------------------------
+           BARRE LATÉRALE CONSERVÉE
+        --------------------------- */
+        .sidebar {
+            width: 240px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar .brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            width: 100%;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-menu li a {
+            text-decoration: none;
+            color: #333333;
+            font-size: 15px;
+            font-weight: 500;
+            display: block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: #eaeaea;
+        }
+
+        /* Onglet Paiements Actif */
+        .sidebar-menu li.active a {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(94, 255, 177, 0.2);
+        }
+
+        /* ---------------------------
+           CONTENU PRINCIPAL
+        --------------------------- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info { text-align: right; }
+        .user-info .name { font-size: 14px; font-weight: bold; color: #000000; }
+        .user-info .role { font-size: 11px; color: #666666; }
+
+        .avatar {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 14px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-body {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* ---------------------------
+           FORMULAIRE DE PAIEMENT (Haut de l'image)
+        --------------------------- */
+        .payment-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .row-inputs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            color: #333333;
+            outline: none;
+        }
+
+        /* Sélecteurs de cotisation */
+        .cotisation-selector {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .cotisation-option {
+            position: relative;
+        }
+
+        .cotisation-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .cotisation-label {
+            display: inline-block;
+            padding: 10px 40px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333333;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .cotisation-option input[type="radio"]:checked + .cotisation-label {
+            border-color: #1a237e;
+            background-color: #f0f2ff;
+            font-weight: 500;
+        }
+
+        /* Bouton Enregistrer Spécifique */
+        .btn-register {
+            background-color: #1a1ba1;
+            color: #ffffff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-register:hover {
+            background-color: #12137a;
+        }
+
+        /* ---------------------------
+           TABLEAU HISTORIQUE (Bas de l'image)
+        --------------------------- */
+        .table-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .history-table th {
+            font-size: 14px;
+            color: #333333;
+            padding: 15px;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .history-table td {
+            font-size: 14px;
+            padding: 20px 15px;
+            color: #333333;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .sidebar-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .row-inputs { flex-direction: column; gap: 15px; }
+            .cotisation-selector { flex-direction: column; gap: 10px; }
+            .cotisation-label { width: 100%; }
+        }
+
+        /* ---------------------------
+           BOUTON DECONNEXION (bas de la sidebar)
+        --------------------------- */
+        .sidebar-logout {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .sidebar-logout a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #e53e3e;
+            background-color: #fdeaea;
+            border: 1px solid #f3caca;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-logout a:hover {
+            background-color: #e53e3e;
+            color: #ffffff;
+            border-color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+        <div class="logo">DMP</div>
+        <div class="brand">Diapal Ma Diap</div>
+        <ul class="sidebar-menu">
+            <li><a href="#">Tableau de board</a></li>
+            <li><a href="apprenants.html">Apprenants</a></li>
+            <li><a href="hebdomadaire.html">Hebdomadaires</a></li>
+            <li><a href="campagne.html">Campagnes</a></li>
+            <li class="active"><a href="paiment.html">Paiments</a></li>
+            <li><a href="passifs.html">Passifs</a></li>
+            <li><a href="relance.html">Relances</a></li>
+        </ul>
+        <div class="sidebar-logout">
+            <a href="connexion.html">Déconnexion</a>
+        </div>
+    </aside>
+
+    <!-- Zone principale -->
+    <main class="main-content">
+        <header class="header">
+            <h1>Gestion des paiements</h1>
+            <div class="user-profile">
+                <div class="user-info">
+                    <p class="name">Mamadou Dev</p>
+                    <p class="role">Gerant</p>
+                </div>
+                <div class="avatar">MD</div>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            
+            <!-- Section Formulaire -->
+            <section class="payment-card">
+                <form action="#" method="POST">
+                    <div class="row-inputs">
+                        <div class="form-group">
+                            <label for="apprenant">Appenant</label>
+                            <input type="text" id="apprenant" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="montant">Montant</label>
+                            <input type="number" id="montant" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>cotisation</label>
+                        <div class="cotisation-selector">
+                            <div class="cotisation-option">
+                                <input type="radio" id="hebdo" name="cotisation-type" value="Hebdomadaire">
+                                <label for="hebdo" class="cotisation-label">Hebdomadaire</label>
+                            </div>
+                            <div class="cotisation-option">
+                                <input type="radio" id="anniversaire" name="cotisation-type" value="Anniversaire" checked>
+                                <label for="anniversaire" class="cotisation-label">Anniversaire</label>
+                            </div>
+                            <div class="cotisation-option">
+                                <input type="radio" id="deces" name="cotisation-type" value="Décès">
+                                <label for="deces" class="cotisation-label">Décès</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-register">+ enregistrer</button>
+                </form>
+            </section>
+
+            <!-- Section Historique -->
+            <section class="table-card">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Apprenant</th>
+                            <th>Montant</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fatou</td>
+                            <td>2000</td>
+                            <td>20-10-2026</td>
+                            <td>Anniversaire</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

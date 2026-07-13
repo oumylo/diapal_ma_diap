@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Coach - Diapal Ma Diap</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ---------------------------
+           BARRE LATÉRALE (MENU COACH)
+        --------------------------- */
+        .sidebar {
+            width: 240px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar .brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            width: 100%;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-menu li a {
+            text-decoration: none;
+            color: #333333;
+            font-size: 15px;
+            font-weight: 500;
+            display: block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: #eaeaea;
+        }
+
+        /* Onglet Actif */
+        .sidebar-menu li.active a {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(94, 255, 177, 0.2);
+        }
+
+        /* ---------------------------
+           CONTENU PRINCIPAL
+        --------------------------- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info { text-align: right; }
+        .user-info .name { font-size: 14px; font-weight: bold; color: #000000; }
+        .user-info .role { font-size: 11px; color: #666666; }
+
+        .avatar {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 14px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-body {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* ---------------------------
+           CARTES DE STATISTIQUES
+        --------------------------- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* Statut spécifique rouge pour les retards */
+        .stat-card.danger .stat-value {
+            color: #ef4444;
+        }
+
+        /* ---------------------------
+           TABLEAU D'ÉVOLUTION
+        --------------------------- */
+        .evolution-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .evolution-card h2 {
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .evolution-card .subtitle {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .evolution-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .evolution-table th {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 12px 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .evolution-table td {
+            font-size: 13px;
+            padding: 16px 10px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .evolution-table td.bold-text, 
+        .evolution-table th.bold-text {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* Bouton Audit */
+        .btn-audit {
+            background-color: #ffffff;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+        }
+
+        .btn-audit:hover {
+            background-color: #f8f9fa;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .sidebar-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .evolution-table th, .evolution-table td { font-size: 11px; padding: 10px 5px; }
+        }
+
+        /* ---------------------------
+           BOUTON DECONNEXION (bas de la sidebar)
+        --------------------------- */
+        .sidebar-logout {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .sidebar-logout a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #e53e3e;
+            background-color: #fdeaea;
+            border: 1px solid #f3caca;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-logout a:hover {
+            background-color: #e53e3e;
+            color: #ffffff;
+            border-color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+        <div class="logo">DMP</div>
+        <div class="brand">Diapal Ma Diap</div>
+        <ul class="sidebar-menu">
+            <li class="active"><a href="dashboard-coach.html">Tableau de bord</a></li>
+            <li><a href="audits.html">Audits des opérations</a></li>
+        </ul>
+        <div class="sidebar-logout">
+            <a href="connexion.html">Déconnexion</a>
+        </div>
+    </aside>
+
+    <!-- Zone principale -->
+    <main class="main-content">
+        <header class="header">
+            <h1>Tableau de board</h1>
+            <div class="user-profile">
+                <div class="user-info">
+                    <p class="name">Wane</p>
+                    <p class="role">Coach</p>
+                </div>
+                <div class="avatar">WA</div>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            
+            <!-- Section indicateurs -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <p class="stat-label">Total Collecté</p>
+                    <p class="stat-value">500000</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Paiement enregistrer</p>
+                    <p class="stat-value">52</p>
+                </div>
+                <div class="stat-card danger">
+                    <p class="stat-label">Retards</p>
+                    <p class="stat-value">10</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Passif enregistrer</p>
+                    <p class="stat-value">7</p>
+                </div>
+            </section>
+
+            <!-- Section Évolution des cotisations -->
+            <section class="evolution-card">
+                <h2>Évolution des cotisations</h2>
+                <p class="subtitle">Total collecté mois par mois depuis le début de la formation</p>
+
+                <table class="evolution-table">
+                    <thead>
+                        <tr>
+                            <th>Mois</th>
+                            <th>Cotisations Hebdomadaires</th>
+                            <th>Campagnes</th>
+                            <th class="bold-text">Total du mois</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mois 1 — Mars</td>
+                            <td>140 000 FCFA</td>
+                            <td>—</td>
+                            <td class="bold-text">140 000 FCFA</td>
+                        </tr>
+                        <tr>
+                            <td>Mois 2 — Avril</td>
+                            <td>150 000 FCFA</td>
+                            <td>4 000 FCFA</td>
+                            <td class="bold-text">154 000 FCFA</td>
+                        </tr>
+                        <tr>
+                            <td>Mois 3 — Mai</td>
+                            <td>145 000 FCFA</td>
+                            <td>10 000 FCFA</td>
+                            <td class="bold-text">155 000 FCFA</td>
+                        </tr>
+                        <tr>
+                            <td>Mois 4 — Juin</td>
+                            <td>150 000 FCFA</td>
+                            <td>7 000 FCFA</td>
+                            <td class="bold-text">157 000 FCFA</td>
+                        </tr>
+                        <tr>
+                            <td>Mois 5 — Juillet (en cours)</td>
+                            <td>135 000 FCFA</td>
+                            <td>3 000 FCFA</td>
+                            <td class="bold-text">138 000 FCFA</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button class="btn-audit" onclick="window.location.href='audits.html'">Ouvrir l'audit détaillé</button>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

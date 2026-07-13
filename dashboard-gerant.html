@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de board - Diapal Ma Diap</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ---------------------------
+           BARRE LATÉRALE (SIDEBAR)
+        --------------------------- */
+        .sidebar {
+            width: 240px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 15px; /* Légèrement réduit pour donner de l'espace aux boutons */
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar .brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            width: 100%;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Espace réduit pour harmoniser les blocs cliquables */
+        }
+
+        .sidebar-menu li {
+            width: 100%;
+        }
+
+        .sidebar-menu li a {
+            text-decoration: none;
+            color: #333333;
+            font-size: 15px;
+            font-weight: 500;
+            display: block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        /* Effet au survol des menus non actifs */
+        .sidebar-menu li a:hover {
+            background-color: #eaeaea;
+            color: #000000;
+        }
+
+        /* Style Joli Vert pour le menu Actif */
+        .sidebar-menu li.active a {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(94, 255, 177, 0.2); /* Léger effet d'ombre sous le bouton vert */
+        }
+
+        .sidebar-menu li.active a:hover {
+            background-color: #4ed997; /* Vert un poil plus sombre au survol */
+        }
+
+        /* ---------------------------
+           CONTENU PRINCIPAL
+        --------------------------- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f6f8;
+        }
+
+        /* En-tête */
+        .header {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-info .name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .user-info .role {
+            font-size: 11px;
+            color: #666666;
+            margin-top: 2px;
+        }
+
+        .avatar {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 14px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Zone des grilles de données */
+        .dashboard-body {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* ---------------------------
+           LES CARDS DE STATISTIQUES
+        --------------------------- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .stat-card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        /* Couleurs spécifiques des titres de stats */
+        .stat-total h3 { color: #4ed997; }
+        .stat-apprenants h3 { color: #000000; }
+        .stat-retards h3 { color: #e53e3e; }
+        .stat-campagnes h3 { color: #d4af37; }
+
+        /* ---------------------------
+           SECTION TABLES SECONDAIRES
+        --------------------------- */
+        .middle-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .data-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .data-card h2 {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 15px;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            font-size: 11px;
+            color: #666666;
+            text-transform: uppercase;
+            padding-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .custom-table td {
+            font-size: 13px;
+            padding: 10px 0;
+            color: #000000;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* ---------------------------
+           SECTION CAMPAGNE ACTIVE (BAS)
+        --------------------------- */
+        .campagne-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        .campagne-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .campagne-header h2 {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .btn-view-all {
+            background-color: #5effb1;
+            color: #000000;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 6px 16px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-view-all:hover {
+            background-color: #4ed997;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .middle-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 20px;
+            }
+            .sidebar-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .sidebar-menu li {
+                width: auto;
+            }
+            .header {
+                padding: 15px;
+            }
+            .dashboard-body {
+                padding: 15px;
+            }
+        }
+
+        /* ---------------------------
+           BOUTON DECONNEXION (bas de la sidebar)
+        --------------------------- */
+        .sidebar-logout {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .sidebar-logout a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #e53e3e;
+            background-color: #fdeaea;
+            border: 1px solid #f3caca;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-logout a:hover {
+            background-color: #e53e3e;
+            color: #ffffff;
+            border-color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre latérale (Menu de gauche) -->
+    <aside class="sidebar">
+        <div class="logo">DMP</div>
+        <div class="brand">Diapal Ma Diap</div>
+        
+        <ul class="sidebar-menu">
+            <li class="active"><a href="dashboard-gerant.html">Tableau de board</a></li>
+            <li><a href="apprenants.html">Apprenants</a></li>
+            <li><a href="hebdomadaire.html">Hebdomadaires</a></li>
+            <li><a href="campagne.html">Campagnes</a></li>
+            <li><a href="#">Paiments</a></li>
+            <li><a href="#">Passifs</a></li>
+            <li><a href="#">Relances</a></li>
+        </ul>
+        <div class="sidebar-logout">
+            <a href="connexion.html">Déconnexion</a>
+        </div>
+    </aside>
+
+    <!-- Zone principale -->
+    <main class="main-content">
+        <!-- Top bar de navigation -->
+        <header class="header">
+            <h1>Tableau de board</h1>
+            
+            <div class="user-profile">
+                <div class="user-info">
+                    <p class="name">Mamadou Dev</p>
+                    <p class="role">Gerant</p>
+                </div>
+                <div class="avatar">MD</div>
+            </div>
+        </header>
+
+        <!-- Zone des Widgets / Cartes -->
+        <div class="dashboard-body">
+            
+            <!-- Grille des statistiques du haut -->
+            <section class="stats-grid">
+                <div class="stat-card stat-total">
+                    <h3>Total Collecté</h3>
+                    <p class="value">500000</p>
+                </div>
+                <div class="stat-card stat-apprenants">
+                    <h3>Apprenants</h3>
+                    <p class="value">52</p>
+                </div>
+                <div class="stat-card stat-retards">
+                    <h3>Retards</h3>
+                    <p class="value">10</p>
+                </div>
+                <div class="stat-card stat-campagnes">
+                    <h3>Campagne Actives</h3>
+                    <p class="value">7</p>
+                </div>
+            </section>
+
+            <!-- Grille du milieu : Derniers Paiements & Retards -->
+            <section class="middle-grid">
+                <div class="data-card">
+                    <h2>Derniere Paiments</h2>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Apprenant</th>
+                                <th>Type</th>
+                                <th class="text-right">Montant</th>
+                                <th class="text-right">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ASSY</td>
+                                <td>S9</td>
+                                <td class="text-right">10000</td>
+                                <td class="text-right">vérsé</td>
+                            </tr>
+                            <tr>
+                                <td>Modou</td>
+                                <td>S3</td>
+                                <td class="text-right">2000</td>
+                                <td class="text-right">vérsé</td>
+                            </tr>
+                            <tr>
+                                <td>Rokh</td>
+                                <td>S1</td>
+                                <td class="text-right">3000</td>
+                                <td class="text-right">retard</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="data-card">
+                    <h2>Retards</h2>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Apprenant</th>
+                                <th>Semaine</th>
+                                <th class="text-right">Montant</th>
+                                <th class="text-right">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ASSY</td>
+                                <td>S9</td>
+                                <td class="text-right">10000</td>
+                                <td class="text-right">retard</td>
+                            </tr>
+                            <tr>
+                                <td>Modou</td>
+                                <td>S3</td>
+                                <td class="text-right">2000</td>
+                                <td class="text-right">retard</td>
+                            </tr>
+                            <tr>
+                                <td>Rokh</td>
+                                <td>S1</td>
+                                <td class="text-right">3000</td>
+                                <td class="text-right">retard</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Grand bloc du bas : Campagnes Actives -->
+            <section class="campagne-card">
+                <div class="campagne-header">
+                    <h2>Campagne active</h2>
+                    <a href="#" class="btn-view-all">Voir Toutes</a>
+                </div>
+                
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Type</th>
+                            <th>Montant</th>
+                            <th>Date Limite</th>
+                            <th class="text-right">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Anniversaire juin</td>
+                            <td>Anniversaire</td>
+                            <td>10000</td>
+                            <td>20-10-2026</td>
+                            <td class="text-right">En cours</td>
+                        </tr>
+                        <tr>
+                            <td>Décès</td>
+                            <td>Décès</td>
+                            <td>10000</td>
+                            <td>20-10-2026</td>
+                            <td class="text-right">En cours</td>
+                        </tr>
+                        <tr>
+                            <td>Anniversaire</td>
+                            <td>Anniversaire</td>
+                            <td>10000</td>
+                            <td>20-10-2026</td>
+                            <td class="text-right">En cours</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

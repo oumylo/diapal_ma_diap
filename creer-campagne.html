@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer une campagne - Diapal Ma Diap</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ---------------------------
+           BARRE LATÉRALE CONSERVÉE
+        --------------------------- */
+        .sidebar {
+            width: 240px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar .brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            width: 100%;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-menu li a {
+            text-decoration: none;
+            color: #333333;
+            font-size: 15px;
+            font-weight: 500;
+            display: block;
+            padding: 12px 20px;
+            border-radius: 8px;
+        }
+
+        .sidebar-menu li.active a {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        /* ---------------------------
+           CONTENU PRINCIPAL
+        --------------------------- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 { font-size: 18px; font-weight: bold; color: #000000; }
+        .user-profile { display: flex; align-items: center; gap: 15px; }
+        .user-info { text-align: right; }
+        .user-info .name { font-size: 14px; font-weight: bold; color: #000000; }
+        .user-info .role { font-size: 11px; color: #666666; }
+        .avatar { background-color: #5effb1; color: #000000; font-weight: bold; width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+
+        .dashboard-body {
+            padding: 30px;
+        }
+
+        /* FORMULAIRE (Image 2) */
+        .form-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+        }
+
+        .form-card h2 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0d1b2a;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 14px;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            color: #333333;
+            outline: none;
+            background-color: #ffffff;
+        }
+
+        /* Sélecteurs de type horizontaux (Image 2) */
+        .type-selector {
+            display: flex;
+            gap: 12px;
+        }
+
+        .type-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .type-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .type-label {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #4a5568;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        /* Option cochée par défaut (Autre) */
+        .type-option input[type="radio"]:checked + .type-label {
+            border-color: #444ee5;
+            color: #444ee5;
+            background-color: #f0f2ff;
+            font-weight: bold;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn-cancel {
+            background-color: #ffffff;
+            color: #333333;
+            border: 1px solid #dcdcdc;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-submit {
+            background-color: #444ee5;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn-submit:hover { background-color: #333cb5; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .sidebar-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+        }
+
+        /* ---------------------------
+           BOUTON DECONNEXION (bas de la sidebar)
+        --------------------------- */
+        .sidebar-logout {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .sidebar-logout a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #e53e3e;
+            background-color: #fdeaea;
+            border: 1px solid #f3caca;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-logout a:hover {
+            background-color: #e53e3e;
+            color: #ffffff;
+            border-color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">DMP</div>
+        <div class="brand">Diapal Ma Diap</div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard-gerant.html">Tableau de board</a></li>
+            <li><a href="apprenants.html">Apprenants</a></li>
+            <li><a href="hebdomadaire.html">Hebdomadaires</a></li>
+            <li class="active"><a href="campagne.html">Campagnes</a></li>
+            <li><a href="paiment.html">Paiments</a></li>
+            <li><a href="passifs.html">Passifs</a></li>
+            <li><a href="relance.html">Relances</a></li>
+        </ul>
+        <div class="sidebar-logout">
+            <a href="connexion.html">Déconnexion</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Créer une campagne</h1>
+            <div class="user-profile">
+                <div class="user-info">
+                    <p class="name">Mamadou Dev</p>
+                    <p class="role">Gerant</p>
+                </div>
+                <div class="avatar">MD</div>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            
+            <div class="form-card">
+                <h2>Nouvelle campagne</h2>
+                <form action="campagne.html" method="POST">
+                    
+                    <div class="form-group">
+                        <label for="event-name">Nom de l'événement</label>
+                        <input type="text" id="event-name" class="form-control" placeholder="Ex : Anniversaire de septembre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type de campagne</label>
+                        <div class="type-selector">
+                            <div class="type-option">
+                                <input type="radio" id="anniv" name="type-campagne" value="anniversaire">
+                                <label for="anniv" class="type-label">Anniversaire</label>
+                            </div>
+                            <div class="type-option">
+                                <input type="radio" id="deces" name="type-campagne" value="deces">
+                                <label for="deces" class="type-label">Décès</label>
+                            </div>
+                            <div class="type-option">
+                                <input type="radio" id="autre" name="type-campagne" value="autre" checked>
+                                <label for="autre" class="type-label">Autre</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="montant">Montant</label>
+                        <input type="number" id="montant" class="form-control" value="10000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date-debut">Date debut</label>
+                        <input type="date" id="date-debut" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date-limite">Date limite</label>
+                        <input type="date" id="date-limite" class="form-control" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="campagne.html" class="btn-cancel">Annuler</a>
+                        <button type="submit" class="btn-submit">Créer la campagne</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Apprenant - Diapal Ma Diap</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ---------------------------
+           BARRE LATÉRALE CONSERVÉE
+        --------------------------- */
+        .sidebar {
+            width: 240px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar .brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            width: 100%;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-menu li a {
+            text-decoration: none;
+            color: #333333;
+            font-size: 15px;
+            font-weight: 500;
+            display: block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: #eaeaea;
+        }
+
+        /* Menu Apprenant Actif */
+        .sidebar-menu li.active a {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(94, 255, 177, 0.2);
+        }
+
+        /* ---------------------------
+           CONTENU PRINCIPAL & NAV
+        --------------------------- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info { text-align: right; }
+        .user-info .name { font-size: 14px; font-weight: bold; color: #000000; }
+        .user-info .role { font-size: 11px; color: #666666; }
+
+        .avatar {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 14px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-body {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* ---------------------------
+           BLOCS DU HAUT (FINANCES)
+        --------------------------- */
+        .top-cards-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 20px;
+        }
+
+        /* Solde (Bleu Foncé) */
+        .balance-card {
+            background-color: #11119c;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .balance-card .label {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .balance-card .amount {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* Échéances */
+        .deadlines-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .deadlines-card h3 {
+            font-size: 14px;
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .deadlines-card .subtitle {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .deadline-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #334155;
+            padding: 10px 0;
+            border-top: 1px dotted #e2e8f0;
+        }
+
+        .deadline-item .item-title {
+            font-weight: 500;
+        }
+
+        .deadline-item .item-price {
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        /* ---------------------------
+           TABLEAU CAMPAGNES OUVERTES
+        --------------------------- */
+        .campaigns-container {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .campaigns-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .campaigns-header h2 {
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .campaigns-header p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .btn-view-all {
+            background-color: #ffffff;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .campaigns-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .campaigns-table th {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 12px 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .campaigns-table td {
+            font-size: 13px;
+            padding: 16px 10px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .campaigns-table td.bold-text {
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        /* Badges Pilules pour les Types */
+        .badge-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+        .badge-type::before {
+            content: "• ";
+            margin-right: 2px;
+        }
+
+        /* Statuts Texte Coloré */
+        .status-text {
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .status-waiting {
+            color: #b45309;
+            background-color: #fffbeb;
+        }
+
+        .status-upcoming {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .status-waiting::before, .status-upcoming::before {
+            content: "•";
+            font-size: 14px;
+        }
+
+        @media (max-width: 992px) {
+            .top-cards-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .sidebar-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .campaigns-table th, .campaigns-table td { font-size: 11px; padding: 10px 5px; }
+        }
+
+        /* ---------------------------
+           BOUTON DECONNEXION (bas de la sidebar)
+        --------------------------- */
+        .sidebar-logout {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .sidebar-logout a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #e53e3e;
+            background-color: #fdeaea;
+            border: 1px solid #f3caca;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-logout a:hover {
+            background-color: #e53e3e;
+            color: #ffffff;
+            border-color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+        <div class="logo">DMP</div>
+        <div class="brand">Diapal Ma Diap</div>
+        <ul class="sidebar-menu">
+            <li class="active"><a href="#">Tableau de board</a></li>
+            <li><a href="historique.html">Historique</a></li>
+            <li><a href="campagne-disponible.html">Campagne disponible</a></li>
+        </ul>
+        <div class="sidebar-logout">
+            <a href="connexion.html">Déconnexion</a>
+        </div>
+    </aside>
+
+    <!-- Zone principale -->
+    <main class="main-content">
+        <header class="header">
+            <h1>Tableau de board</h1>
+            <div class="user-profile">
+                <div class="user-info">
+                    <p class="name">Oumou LO</p>
+                    <p class="role">Apprenante</p>
+                </div>
+                <div class="avatar">OL</div>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            
+            <!-- Blocs financiers supérieurs -->
+            <div class="top-cards-grid">
+                <div class="balance-card">
+                    <p class="label">Mon solde de cotisation</p>
+                    <p class="amount">40 000 Fcfa versées</p>
+                </div>
+
+                <div class="deadlines-card">
+                    <h3>Mes échéances</h3>
+                    <p class="subtitle">Prochaine paiement attendus</p>
+                    
+                    <div class="deadline-item">
+                        <span class="item-title">cotisation hebdomadaire - semaine 10</span>
+                        <span class="item-price">5000</span>
+                    </div>
+                    <div class="deadline-item">
+                        <span class="item-title">Campagne Anniversaires de juillet</span>
+                        <span class="item-price">3000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des campagnes ouvertes -->
+            <section class="campaigns-container">
+                <div class="campaigns-header">
+                    <div>
+                        <h2>Mes campagnes ouvertes</h2>
+                        <p class="subtitle">Campagnes auxquelles je peux participer</p>
+                    </div>
+                    <button class="btn-view-all">Voir toutes</button>
+                </div>
+
+                <table class="campaigns-table">
+                    <thead>
+                        <tr>
+                            <th>Campagne</th>
+                            <th>Type</th>
+                            <th>Montant</th>
+                            <th>Date Limite</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Décès — Famille Ndoye</td>
+                            <td><span class="badge-type">Décès</span></td>
+                            <td class="bold-text">10 000 FCFA</td>
+                            <td>19/07/2026</td>
+                            <td><span class="status-text status-waiting">En attente</span></td>
+                        </tr>
+                        <tr>
+                            <td>Anniversaires de Juillet</td>
+                            <td><span class="badge-type">Anniversaire</span></td>
+                            <td class="bold-text">3 000 FCFA</td>
+                            <td>31/07/2026</td>
+                            <td><span class="status-text status-waiting">En attente</span></td>
+                        </tr>
+                        <tr>
+                            <td>Sortie pédagogique</td>
+                            <td><span class="badge-type">Sortie</span></td>
+                            <td class="bold-text">7 500 FCFA</td>
+                            <td>05/08/2026</td>
+                            <td><span class="status-text status-upcoming">À venir</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Diapal Ma Diap</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #ffffff;
+            padding: 20px; /* Évite que la carte colle aux bords de l'écran sur mobile */
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 680px; /* Utilisation de min-height plutôt que height fixe */
+            background-color: #000000;
+            overflow: hidden;
+        }
+
+        /* Section de gauche : Image */
+        .image-section {
+            flex: 1.2;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+                              url('images/\ photo-connexion.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Section de droite : Formulaire */
+        .form-section {
+            flex: 0.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: #000000;
+        }
+
+        .card {
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 30px 30px;
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo et Titre */
+        .logo {
+            background-color: #5effb1;
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Formulaire */
+        form {
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 6px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            background-color: #ffffff;
+            color: #000000;
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* Bouton d'inscription */
+        .btn-submit {
+            width: 100%;
+            background-color: #5effb1;
+            color: #000000;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #4ed997;
+        }
+
+        /* Lien de redirection */
+        .login-link {
+            width: 100%;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        .login-link a {
+            color: #1a365d;
+            font-size: 12px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* CSS Ajouté pour tes trois liens du bas */
+        .roles-links {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .roles-links a {
+            color: #5effb1;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .roles-links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Responsive pour les tablettes et mobiles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* L'image passe au-dessus du formulaire */
+                min-height: auto;
+                height: auto;
+            }
+            .image-section {
+                height: 250px; /* Hauteur de l'image réduite sur mobile pour laisser la place au formulaire */
+                width: 100%;
+            }
+            .form-section {
+                padding: 40px 10px;
+                width: 100%;
+            }
+            .card {
+                max-width: 100%; /* La carte prend toute la largeur disponible sur petit écran */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Partie gauche : Image -->
+        <div class="image-section"></div>
+
+        <!-- Partie droite : Formulaire d'inscription -->
+        <div class="form-section">
+            <div class="card">
+                
+                <div class="logo">DMP</div>
+                <h1 class="title">Diapal Ma Diap</h1>
+
+                <form>
+                    <div class="input-group">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" placeholder="Votre prénom" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" placeholder="Votre nom" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="telephone">Telephone</label>
+                        <input type="text" id="telephone" placeholder="77XXXXXXX" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" placeholder="••••••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">S'inscrire</button>
+                    
+                    <div class="login-link">
+                        <a href="connexion.html">Se connecter</a>
+                    </div>
+                </form>
+
+                <!-- Les trois liens maintenant bien stylisés et intégrés dans la carte -->
+                <div class="roles-links">
+                    <a href="dashboard-coach.html">Coach</a>
+                    <a href="dashboard-gerant.html">Gérant</a>
+                    <a href="dashboard-apprenant.html">Apprenant</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
